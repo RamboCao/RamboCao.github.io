@@ -6,7 +6,7 @@ abbrlink: c9eafdcf
 date: 2020-12-24 21:30:26
 ---
 
-之前使用 </code>Hexo</code> 和 </code>Github Pages</code> 搭建了 Hexo 博客，但是每次运行 <code>hexo g && hexo g</code> 只是将生成的静态文件部署在 Github 上，所以如果想要对 Hexo 博客进行备份或者是迁移到其他的电脑上，就需要将 Hexo 生成的网站源文件也 push 到 Github 上，但是 master 分支主要是用来部署 hexo 静态文件的，主要体现在 <code>_config.uml</code> 中的 <code>deploy</code>的配置上，所以我们需要新建一个分支来对源码进行推送。
+之前使用 </code>Hexo</code> 和 </code>Github Pages</code> 搭建了 Hexo 博客，但是每次运行 <code>hexo g && hexo g</code> 只是将生成的静态文件部署在 Github 上，所以如果想要对 Hexo 博客进行备份或者是迁移到其他的电脑上，就需要将 Hexo 生成的网站源文件也 push 到 Github 上，但是 master 分支主要是用来部署 hexo 静态文件的，主要体现在 <code>_config.yml</code> 中的 <code>deploy</code>的配置上，所以我们需要新建一个分支来对源码进行推送。
 
 ### 主要步骤
 
@@ -65,12 +65,13 @@ git clone -b hexo git@github.com:RamboCao/RamboCao.github.io.git ./blog
 ```
 
 #### 安装npm依赖
+博客目录下安装下如下包，其中 <code>npm install</code> 会安装 <code>package.json</code> 文件中所有的包。
 ```shell
 npm install -g hexo-cli
 npm install gulp -g 
 npm install
 ```
----
+
 ### 更新多分支代码
 ```shell
 # 可以使用 hexo c && hexo g && hexo d 
