@@ -1,6 +1,8 @@
 ---
 title: Hexo 博客搭建
-tags: Hexo, Install
+tags: 
+    - Hexo
+    - Install
 categories: Hexo
 keywords: Hexo 安装
 top_img:

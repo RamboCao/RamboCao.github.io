@@ -161,9 +161,20 @@ abbrlink:
   # Generate categories from directory-tree
   # depth: the max_depth of directory-tree you want to generate, should > 0
   auto_category:
-     enable: true  #true(default)
-     depth:        #3(default)
-     over_write: false 
+    enable: true  #true(default)
+    depth:        #3(default)
+    over_write: false 
   auto_title: false #enable auto title, it can auto fill the title by path
   auto_date: false #enable auto date, it can auto fill the date by time today
   force: false #enable force mode,in this mode, the plugin will ignore the cache, and calc the abbrlink for every post even it already had abbrlink.
+
+  # Security
+encrypt: # hexo-blog-encrypt
+  abstract: 有东西被加密了, 请输入密码查看.
+  message: 您好, 这里需要密码.
+  tags:
+  - {name: Hexo, password: 1qaz}
+  - {name: Boss, password: 2wsx}
+  theme: xray
+  wrong_pass_message: 抱歉, 这个密码看着不太对, 请再试试.
+  wrong_hash_message: 抱歉, 这个文章不能被校验, 不过您还是能看看解密后的内容.
