@@ -57,7 +57,7 @@
     <link href="http://example.com/posts/ab21860c/"/>
     <id>http://example.com/posts/ab21860c/</id>
     <published>2020-12-23T02:57:32.000Z</published>
-    <updated>2020-12-24T15:56:41.397Z</updated>
+    <updated>2020-12-25T03:31:31.729Z</updated>
     
     
       
@@ -73,7 +73,9 @@
     <category term="Hexo" scheme="http://example.com/categories/Hexo/"/>
     
     
-    <category term="Hexo, Install" scheme="http://example.com/tags/Hexo-Install/"/>
+    <category term="Hexo" scheme="http://example.com/tags/Hexo/"/>
+    
+    <category term="Install" scheme="http://example.com/tags/Install/"/>
     
   </entry>
   
