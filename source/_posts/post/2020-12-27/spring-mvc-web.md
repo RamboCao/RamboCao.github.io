@@ -153,4 +153,136 @@ this.resourceHandlerRegistrationCustomizer = resourceHandlerRegistrationCustomiz
 }
 ```
 
-### 
+### 请求参数处理
+
+1. xxxMapping
+2. Rest风格，使用HTTP请求方式的动词来表示对资源的操作，但是表单只能提交 GET 和 POST请求
+3. 核心 <code>Filter</code>: <code>HiddentHttpMethodFilter</code>
+    - 用法：表单 <code>method-post</code>(必须), 隐藏域 <code>_method = put/delete</code>
+    ```java
+    @Bean
+    // 容器中没有 HiddenHttpMethodFilter.class, 使用下边 new OrderedHiddenHttpMethodFilter(), 条件成立
+	@ConditionalOnMissingBean(HiddenHttpMethodFilter.class)
+    // 配置文件中 spring.mvc.hiddenmethod.filter.enable 默认为 false，需要手动开启
+	@ConditionalOnProperty(prefix = "spring.mvc.hiddenmethod.filter", name = "enabled", matchIfMissing = false)
+	public OrderedHiddenHttpMethodFilter hiddenHttpMethodFilter() {
+		return new OrderedHiddenHttpMethodFilter();
+	}
+    ```
+
+    ```yaml
+    spring.mvc.hiddenmethod.filter.enable = true #开启页面表单的 Request 
+    ```
+
+#### REST 原理
+表单提交使用 <code>REST</code> 的时候
+1. 表单提交 = <code>PUT/DELETE</code>
+2. 请求过来被 <code>HiddenHttpMethodFilter</code> 拦截
+    - 请求是否正常，并且为 <code>POST</code>
+    - 获取 <code>_method</code> 的值，是 <code>GET/POST/PUT/DELETE</code>，可以大写，也可以小写
+    - 兼容以下请求 <code>GET/POST/PUT/DELETE</code>
+    - 原生 <code>request(post)</code>, 使用包装模式 <code>requestWarpper</code> 重写了 <code>getMethod()</cpde> 方法。放回的是传入的值
+    - 过滤器放行的是用 <code>warpper</code>，以后的方法调用 <code>getmethod</code> 是调用 <code>requestWarpper</code> 的
+
+```java
+@Override
+protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+        throws ServletException, IOException {
+
+    HttpServletRequest requestToUse = request;
+
+    if ("POST".equals(request.getMethod()) && request.getAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE) == null) {
+        String paramValue = request.getParameter(this.methodParam);
+        if (StringUtils.hasLength(paramValue)) {
+            // 隐藏域 _method = put/delete
+            String method = paramValue.toUpperCase(Locale.ENGLISH);
+            if (ALLOWED_METHODS.contains(method)) {
+                requestToUse = new HttpMethodRequestWrapper(request, method);
+            }
+        }
+    }
+    filterChain.doFilter(requestToUse, response);
+}
+```
+
+Rest 使用客户端工具
+PostMan:
+    不使用上述方式，可以直接发送 PUT/DELETE
+
+RequestMapping == GetMapping/PutMapping/DeleteMapping/PostMapping
+
+#### 修改 _method
+
+写一个 HiddenHttpMethodFilter， 然后设置 setMethodParam
+
+```java
+/**
+ * @author caolp
+ */
+public class WebConfig {
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter(){
+        HiddenHttpMethodFilter methodFilter = new HiddenHttpMethodFilter();
+        methodFilter.setMethodParam("_m");
+        return methodFilter;
+    }
+}
+```
+
+#### 请求映射原理
+
+![请求映射原理结构图](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/1609078890555.jpg)
+
+Spring MVC 功能分析：每个请求都会从 org.springframework.web.servlet.DispatcherServlet -> doDispatch() 方法请求。
+
+```java
+protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// 包装
+        HttpServletRequest processedRequest = request;
+		HandlerExecutionChain mappedHandler = null;
+		boolean multipartRequestParsed = false;
+        // 是否乙部
+		WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
+
+		try {
+			ModelAndView mv = null;
+			Exception dispatchException = null;
+
+			try {
+                // 处理文件上传请求
+				processedRequest = checkMultipart(request);
+				multipartRequestParsed = (processedRequest != request);
+
+				// Determine handler for the current request.
+                //决定当前请求使用哪一个 handler(Contorller的方法)
+				mappedHandler = getHandler(processedRequest);
+
+
+                @Nullable
+                protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+                    // 获取所有的 handlerMappings，处理器映射
+                    if (this.handlerMappings != null) {
+                        for (HandlerMapping mapping : this.handlerMappings) {
+                            HandlerExecutionChain handler = mapping.getHandler(request);
+                            if (handler != null) {
+                                return handler;
+                            }
+                        }
+                    }
+                    return null;
+                }
+```
+
+handlerMappings 有5个，分别是：
+1. RequestMappingHandlerMapping
+    保存了所有的 @RequestMapping 和 handler 的映射规则，Spring 启动时，会将所有的 RequestMaping 注解标注的全部扫描出来并保存在 RequestMappingHandlerMapping 中的 mappingRegistry 中
+2. welcomePageHandlerMapping
+    欢迎页处理
+3. BeanNameUrlHandlerMapping
+4. RouteFunctionMapping
+5. SimpleUrlHandlerMapping
+
+- Spring Boot 自动配置欢迎页的 welcomePageHandlerMapping / 能访问到 index.html
+- Spring Boot 自动配置了默认的 RequestMappingHandlerMapping
+- 所有的请求映射都在 halderMapping 中，
+    - 请求进来挨个尝试 HandlerMapping 看是否有请求信息，如果有，就找到这个请求对应的 handler, 如果没有就是下一个 handlerMapping
+- 我们需要一些自定义的映射处理，我们可以自己给容器中放 handlerMapping，自定义 handlerMapping

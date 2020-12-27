@@ -4,6 +4,7 @@ tags: Spring Boot
 cover: 'https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18003.jpg'
 abbrlink: 591b5c47
 date: 2020-12-26 22:17:40
+categories: Spring Boot
 ---
 
 ---

@@ -3,6 +3,7 @@ title: Hexo 博客备份与迁移
 tags: Hexo
 cover: 'https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18107.jpg'
 abbrlink: c9eafdcf
+categories: Hexo
 date: 2020-12-24 21:30:26
 ---
 
