@@ -206,15 +206,15 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 }
 ```
 
-Rest 使用客户端工具
+<code>Rest</code>请求，使用客户端工具
 PostMan:
     不使用上述方式，可以直接发送 PUT/DELETE
 
-RequestMapping == GetMapping/PutMapping/DeleteMapping/PostMapping
+<code>RequestMapping == GetMapping/PutMapping/DeleteMapping/PostMapping</code>
 
 #### 修改 _method
 
-写一个 HiddenHttpMethodFilter， 然后设置 setMethodParam
+写一个 <cpde>HiddenHttpMethodFilter</code>， 然后设置 <code>setMethodParam</code>
 
 ```java
 /**
@@ -233,7 +233,7 @@ public class WebConfig {
 
 ![请求映射原理结构图](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/1609078890555.jpg)
 
-Spring MVC 功能分析：每个请求都会从 org.springframework.web.servlet.DispatcherServlet -> doDispatch() 方法请求。
+<code>Spring MVC</code> 功能分析：每个请求都会从 <code>org.springframework.web.servlet.DispatcherServlet -> doDispatch()</code> 方法请求。
 
 ```java
 protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -273,9 +273,9 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
                 }
 ```
 
-handlerMappings 有5个，分别是：
+<code>handlerMappings</code> 有5个,分别是：
 1. RequestMappingHandlerMapping
-    保存了所有的 @RequestMapping 和 handler 的映射规则，Spring 启动时，会将所有的 RequestMaping 注解标注的全部扫描出来并保存在 RequestMappingHandlerMapping 中的 mappingRegistry 中
+    保存了所有的 @RequestMapping 和 handler 的映射规则，Spring 启动时, 会将所有的 RequestMaping 注解标注的全部扫描出来并保存在 RequestMappingHandlerMapping 中的 mappingRegistry 中
 2. welcomePageHandlerMapping
     欢迎页处理
 3. BeanNameUrlHandlerMapping
