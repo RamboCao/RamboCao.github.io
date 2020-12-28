@@ -275,15 +275,15 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
 
 <code>handlerMappings</code> 有5个,分别是：
 1. RequestMappingHandlerMapping
-    保存了所有的 @RequestMapping 和 handler 的映射规则，Spring 启动时, 会将所有的 RequestMaping 注解标注的全部扫描出来并保存在 RequestMappingHandlerMapping 中的 mappingRegistry 中
+    保存了所有的 <code>@RequestMapping</code> 和 <code>handler</code> 的映射规则，<code>Spring Boot</code> 启动时, 会将所有的 <code>RequestMaping</code> 注解标注的全部扫描出来并保存在 <code>RequestMappingHandlerMapping</code> 中的 <code>mappingRegistry</code> 中
 2. welcomePageHandlerMapping
     欢迎页处理
 3. BeanNameUrlHandlerMapping
 4. RouteFunctionMapping
 5. SimpleUrlHandlerMapping
 
-- Spring Boot 自动配置欢迎页的 welcomePageHandlerMapping / 能访问到 index.html
-- Spring Boot 自动配置了默认的 RequestMappingHandlerMapping
-- 所有的请求映射都在 halderMapping 中，
-    - 请求进来挨个尝试 HandlerMapping 看是否有请求信息，如果有，就找到这个请求对应的 handler, 如果没有就是下一个 handlerMapping
-- 我们需要一些自定义的映射处理，我们可以自己给容器中放 handlerMapping，自定义 handlerMapping
+- <code>Spring Boot</code> 自动配置欢迎页的 <code>welcomePageHandlerMapping</code> / 能访问到 index.html
+- <code>Spring Boot</code> 自动配置了默认的 <code>RequestMappingHandlerMapping</code>
+- 所有的请求映射都在 <code>HalderMapping</code> 中，
+    - 请求进来挨个尝试 <code>HandlerMapping<code> 看是否有请求信息，如果有，就找到这个请求对应的 <code>handler</code>, 如果没有就是下一个 <code>handlerMapping</code>
+- 我们需要一些自定义的映射处理，我们可以自己给容器中放 <code>handlerMapping<code>，自定义 <code>handlerMapping</code>
