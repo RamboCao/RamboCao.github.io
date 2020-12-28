@@ -286,4 +286,4 @@ protected void doDispatch(HttpServletRequest request, HttpServletResponse respon
 - <code>Spring Boot</code> 自动配置了默认的 <code>RequestMappingHandlerMapping</code>
 - 所有的请求映射都在 <code>HalderMapping</code> 中，
     - 请求进来挨个尝试 <code>HandlerMapping</code> 看是否有请求信息，如果有，就找到这个请求对应的 <code>handler</code>, 如果没有就是下一个 <code>handlerMapping</code>
-- 我们需要一些自定义的映射处理，我们可以自己给容器中放 <code>handlerMapping<code>，自定义 <code>handlerMapping</code>
+- 我们需要一些自定义的映射处理，我们可以自己给容器中放 <code>handlerMapping</code>，自定义 <code>handlerMapping</code>
