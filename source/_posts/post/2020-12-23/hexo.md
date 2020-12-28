@@ -87,12 +87,17 @@ ssh-keygen -t rsa -C "你的邮箱地址" # 本地目录与 Github 进行关联
 # 第二步得到的 id_rsa.pub 在 C:/Users/[username]/.ssh下，github中新建一个 ssh key 放入该文件内容
 ```
 <code>_config.yml</code> 文件中<code>deploy</code>修改如下信息
+
 ```shell
 type: git
-repo: git@github.com:Github用户名/github用户名.github.io.git  
-//也可使用https地址，如：https://github.com/Github用户名/Github用户名.github.io.git            
+# 使用这个配置不用每次都输入账号密码
+repo: git@github.com:Github用户名/github用户名.github.io.git
+# repo: git@github.com:RamboCao/RamboCao.github.io.git
+# 也可使用https地址, 但是每次push或者编译都需要输入账号密码
+# repo: https://github.com/RamboCao/RamboCao.github.io 
 branch: master
 ```
+
 控制台输入上方的 <code>hexo g && hexo d </code>命令， 就可以在 **https://用户名.github.io** 中查看网站的内容，和本地调试保持一致。
 ### Hexo 主题优化
 {% note info modern %}

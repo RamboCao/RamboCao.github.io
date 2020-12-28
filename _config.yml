@@ -104,7 +104,9 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/RamboCao/RamboCao.github.io
+  #repo: https://github.com/RamboCao/RamboCao.github.io
+  # 使用这个配置不用每次都输入账号密码
+  repo: git@github.com:RamboCao/RamboCao.github.io.git
   branch: master
 
 
