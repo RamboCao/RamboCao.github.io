@@ -4,7 +4,7 @@ tags: Spring Boot
 categories: Spring Boot
 abbrlink: d8220296
 date: 2020-12-29 15:20:51
-cover: ![18005](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18005.jpg)
+cover: https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18005.jpg
 ---
 
 ![18005](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18005.jpg)
