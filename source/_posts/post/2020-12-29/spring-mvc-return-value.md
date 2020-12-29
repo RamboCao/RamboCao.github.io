@@ -1,10 +1,13 @@
 ---
 title: Spring Boot Web 返回值处理
-date: 2020-12-29 22:07:34
 tags: Spring Boot
 categories: Spring Boot
-cover:
+abbrlink: 51bf75dc
+date: 2020-12-29 22:07:34
+cover: https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18029.jpg
 ---
+
+![18029](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18029.jpg)
 
 ### 数据响应与内容协商
 
@@ -201,6 +204,20 @@ if (selectedMediaType != null) {
 19. Spring MVC 会按个遍历所有底层的 messageConverters, 看谁能处理这样的消息 
 
 
+#### HttpMessageConverter
+HttpMessageConverter 规范:
+
+![HttpMessageConverter](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/HttpMessageConverter.jpg)
+
+看是否支持将此 Class 类型的对象，转为 MediaType 类型的数据
+
+例子： Person 转 Json(响应) 或者 Json 转 Person(请求)
+例子：canRead() 能否将读入的 Person 转为 Json 数据
+
+默认的 messageConverters:
+
+![messageConverters](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/messageConverters.jpg)
+
 
 
 #### 内容协商
@@ -245,6 +262,8 @@ else {
         }
     }
 ```
+
+
 
 
 
