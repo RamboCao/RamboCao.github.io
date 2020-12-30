@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>spring-mvc-return-value</title>
+      <link href="posts/de3a12fb/"/>
+      <url>posts/de3a12fb/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18029.jpg" alt="18029" /></p><h3 id="数据响应与内容协商"><a class="markdownIt-Anchor" href="#数据响应与内容协商"></a> 数据响应与内容协商</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> Spring Boot </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Spring Boot </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Spring Boot Web 返回值处理</title>
       <link href="posts/51bf75dc/"/>
       <url>posts/51bf75dc/</url>
