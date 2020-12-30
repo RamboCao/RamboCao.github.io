@@ -15,10 +15,10 @@ cover: https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18029.jpg
  - 响应页面
  - Json, Xml, xls, 图片视频, 自定义协商内容
 
- #### 响应json数据
+#### 响应json数据
 
- 1. 如何使用
- 使用 json.jar + @ResponseBody, 想导入相关依赖(其实已经导入), 然后在方法上添加 @ResponseBody 注解
+1. 如何使用
+使用 json.jar + @ResponseBody, 想导入相关依赖(其实已经导入), 然后在方法上添加 @ResponseBody 注解
 
  ```xml
 <dependency>
@@ -59,13 +59,13 @@ cover: https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18029.jpg
 </dependency>
  ```
 
- #### 响应 Json 数据原理
- 1. 进入 DispatcherServlet.java 文件中的 doDispatch 方法
- 2. 拿到 HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
- 3. 真正的执行 mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
- 4. handle 方法内部实现中 handleInternal() 继续进行处理
- 5. 然后执行 invokeHandlerMethod() 执行 handler 方法
- 6. 在 invokeHandlerMethod() 中既有参数解析器 argumentResolvers, 又有返回值解析器 returnValueHandlers
+#### 响应 Json 数据原理
+1. 进入 DispatcherServlet.java 文件中的 doDispatch 方法
+2. 拿到 HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
+3. 真正的执行 mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
+4. handle 方法内部实现中 handleInternal() 继续进行处理
+5. 然后执行 invokeHandlerMethod() 执行 handler 方法
+6. 在 invokeHandlerMethod() 中既有参数解析器 argumentResolvers, 又有返回值解析器 returnValueHandlers
 
  ```java
 if (this.argumentResolvers != null) {
@@ -217,8 +217,6 @@ HttpMessageConverter 规范:
 默认的 messageConverters:
 
 ![messageConverters](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/messageConverters.jpg)
-
-
 
 #### 内容协商
 浏览器默认会以请求头的方式告诉服务器它能接收什么样的内容类型
