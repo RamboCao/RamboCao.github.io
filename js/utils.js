@@ -1,1 +1,251 @@
-"use strict";function _toConsumableArray(e){if(Array.isArray(e)){for(var n=0,t=Array(e.length);n<e.length;n++)t[n]=e[n];return t}return Array.from(e)}var btf={debounce:function(o,i,r){var a=void 0;return function(){var e=this,n=arguments,t=r&&!a;clearTimeout(a),a=setTimeout(function(){a=null,r||o.apply(e,n)},i),t&&o.apply(e,n)}},throttle:function(t,o,i){var r=void 0,a=void 0,s=void 0,u=0;i=i||{};function d(){u=!1===i.leading?0:(new Date).getTime(),r=null,t.apply(a,s),r||(a=s=null)}return function(){var e=(new Date).getTime();u||!1!==i.leading||(u=e);var n=o-(e-u);a=this,s=arguments,n<=0||o<n?(r&&(clearTimeout(r),r=null),u=e,t.apply(a,s),r||(a=s=null)):r||!1===i.trailing||(r=setTimeout(d,n))}},sidebarPaddingR:function(){var e=window.innerWidth,n=document.body.clientWidth,t=e-n;e!==n&&(document.body.style.paddingRight=t+"px")},snackbarShow:function(e,n,t){var o=void 0!==n&&n,i=void 0!==t?t:2e3,n=GLOBAL_CONFIG.Snackbar.position,t="light"===document.documentElement.getAttribute("data-theme")?GLOBAL_CONFIG.Snackbar.bgLight:GLOBAL_CONFIG.Snackbar.bgDark;Snackbar.show({text:e,backgroundColor:t,showAction:o,duration:i,pos:n})},initJustifiedGallery:function(e){e instanceof jQuery||(e=$(e)),e.each(function(e,n){$(this).is(":visible")&&$(this).justifiedGallery({rowHeight:220,margins:4})})},diffDate:function(e){var n,t=1<arguments.length&&void 0!==arguments[1]&&arguments[1],o=new Date,i=new Date(e),r=o.getTime()-i.getTime(),a=864e5;return t?(n=r/a,e=r/36e5,o=r/6e4,12<(t=r/2592e6)?i.toLocaleDateString().replace(/\//g,"-"):1<=t?parseInt(t)+" "+GLOBAL_CONFIG.date_suffix.month:1<=n?parseInt(n)+" "+GLOBAL_CONFIG.date_suffix.day:1<=e?parseInt(e)+" "+GLOBAL_CONFIG.date_suffix.hour:1<=o?parseInt(o)+" "+GLOBAL_CONFIG.date_suffix.min:GLOBAL_CONFIG.date_suffix.just):parseInt(r/a)},loadComment:function(e,n){var t;"IntersectionObserver"in window?(t=new IntersectionObserver(function(e){e[0].isIntersecting&&(n(),t.disconnect())},{threshold:[0]})).observe(e):n()},scrollToDest:function(o,i){var r,a;o<0||i<0||(r=window.scrollY||window.screenTop,o<r&&(o-=70),"CSS"in window&&CSS.supports("scroll-behavior","smooth")?window.scrollTo({top:o,behavior:"smooth"}):(a=null,i=i||500,window.requestAnimationFrame(function e(n){var t;a=a||n,r<o?(t=n-a,window.scrollTo(0,(o-r)*t/i+r),t<i?window.requestAnimationFrame(e):window.scrollTo(0,o)):(n=n-a,window.scrollTo(0,r-(r-o)*n/i),n<i?window.requestAnimationFrame(e):window.scrollTo(0,o))})))},fadeIn:function(e,n){e.style.cssText="display:block;animation: to_show "+n+"s"},fadeOut:function(n,e){n.addEventListener("animationend",function e(){n.style.cssText="display: none; animation: '' ",n.removeEventListener("animationend",e)}),n.style.animation="to_hide "+e+"s"},getParents:function(e,n){for(;e&&e!==document;e=e.parentNode)if(e.matches(n))return e;return null},siblings:function(n,t){return[].concat(_toConsumableArray(n.parentNode.children)).filter(function(e){return t?e!==n&&e.matches(t):e!==n})},wrap:function(e,n){var t=2<arguments.length&&void 0!==arguments[2]?arguments[2]:"",o=3<arguments.length&&void 0!==arguments[3]?arguments[3]:"",n=document.createElement(n);t&&(n.id=t),o&&(n.className=o),e.parentNode.insertBefore(n,e),n.appendChild(e)},unwrap:function(e){var n=e.parentNode;n!==document.body&&(n.parentNode.insertBefore(e,n),n.parentNode.removeChild(n))},isJqueryLoad:function(e){"undefined"==typeof jQuery?getScript(GLOBAL_CONFIG.source.jQuery).then(e):e()},isHidden:function(e){return 0===e.offsetHeight&&0===e.offsetWidth},getEleTop:function(e){for(var n=e.offsetTop,t=e.offsetParent;null!==t;)n+=t.offsetTop,t=t.offsetParent;return n}};
+const btf = {
+  debounce: function (func, wait, immediate) {
+    let timeout
+    return function () {
+      const context = this
+      const args = arguments
+      const later = function () {
+        timeout = null
+        if (!immediate) func.apply(context, args)
+      }
+      const callNow = immediate && !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      if (callNow) func.apply(context, args)
+    }
+  },
+
+  throttle: function (func, wait, options) {
+    let timeout, context, args
+    let previous = 0
+    if (!options) options = {}
+
+    const later = function () {
+      previous = options.leading === false ? 0 : new Date().getTime()
+      timeout = null
+      func.apply(context, args)
+      if (!timeout) context = args = null
+    }
+
+    const throttled = function () {
+      const now = new Date().getTime()
+      if (!previous && options.leading === false) previous = now
+      const remaining = wait - (now - previous)
+      context = this
+      args = arguments
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout)
+          timeout = null
+        }
+        previous = now
+        func.apply(context, args)
+        if (!timeout) context = args = null
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining)
+      }
+    }
+
+    return throttled
+  },
+
+  sidebarPaddingR: () => {
+    const innerWidth = window.innerWidth
+    const clientWidth = document.body.clientWidth
+    const paddingRight = innerWidth - clientWidth
+    if (innerWidth !== clientWidth) {
+      document.body.style.paddingRight = paddingRight + 'px'
+    }
+  },
+
+  snackbarShow: (text, showAction, duration) => {
+    const sa = (typeof showAction !== 'undefined') ? showAction : false
+    const dur = (typeof duration !== 'undefined') ? duration : 2000
+    const position = GLOBAL_CONFIG.Snackbar.position
+    const bg = document.documentElement.getAttribute('data-theme') === 'light' ? GLOBAL_CONFIG.Snackbar.bgLight : GLOBAL_CONFIG.Snackbar.bgDark
+    Snackbar.show({
+      text: text,
+      backgroundColor: bg,
+      showAction: sa,
+      duration: dur,
+      pos: position
+    })
+  },
+
+  initJustifiedGallery: function (selector) {
+    if (!(selector instanceof jQuery)) {
+      selector = $(selector)
+    }
+    selector.each(function (i, o) {
+      if ($(this).is(':visible')) {
+        $(this).justifiedGallery({
+          rowHeight: 220,
+          margins: 4
+        })
+      }
+    })
+  },
+
+  diffDate: (d, more = false) => {
+    const dateNow = new Date()
+    const datePost = new Date(d)
+    const dateDiff = dateNow.getTime() - datePost.getTime()
+    const minute = 1000 * 60
+    const hour = minute * 60
+    const day = hour * 24
+    const month = day * 30
+
+    let result
+    if (more) {
+      const monthCount = dateDiff / month
+      const dayCount = dateDiff / day
+      const hourCount = dateDiff / hour
+      const minuteCount = dateDiff / minute
+
+      if (monthCount > 12) {
+        result = datePost.toLocaleDateString().replace(/\//g, '-')
+      } else if (monthCount >= 1) {
+        result = parseInt(monthCount) + ' ' + GLOBAL_CONFIG.date_suffix.month
+      } else if (dayCount >= 1) {
+        result = parseInt(dayCount) + ' ' + GLOBAL_CONFIG.date_suffix.day
+      } else if (hourCount >= 1) {
+        result = parseInt(hourCount) + ' ' + GLOBAL_CONFIG.date_suffix.hour
+      } else if (minuteCount >= 1) {
+        result = parseInt(minuteCount) + ' ' + GLOBAL_CONFIG.date_suffix.min
+      } else {
+        result = GLOBAL_CONFIG.date_suffix.just
+      }
+    } else {
+      result = parseInt(dateDiff / day)
+    }
+    return result
+  },
+
+  loadComment: (dom, callback) => {
+    if ('IntersectionObserver' in window) {
+      const observerItem = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          callback()
+          observerItem.disconnect()
+        }
+      }, { threshold: [0] })
+      observerItem.observe(dom)
+    } else {
+      callback()
+    }
+  },
+
+  scrollToDest: (pos, time) => {
+    if (pos < 0 || time < 0) {
+      return
+    }
+
+    const currentPos = window.scrollY || window.screenTop
+    if (currentPos > pos) pos = pos - 70
+
+    if ('CSS' in window && CSS.supports('scroll-behavior', 'smooth')) {
+      window.scrollTo({
+        top: pos,
+        behavior: 'smooth'
+      })
+      return
+    }
+
+    let start = null
+    time = time || 500
+    window.requestAnimationFrame(function step (currentTime) {
+      start = !start ? currentTime : start
+      if (currentPos < pos) {
+        const progress = currentTime - start
+        window.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos)
+        if (progress < time) {
+          window.requestAnimationFrame(step)
+        } else {
+          window.scrollTo(0, pos)
+        }
+      } else {
+        const progress = currentTime - start
+        window.scrollTo(0, currentPos - ((currentPos - pos) * progress / time))
+        if (progress < time) {
+          window.requestAnimationFrame(step)
+        } else {
+          window.scrollTo(0, pos)
+        }
+      }
+    })
+  },
+
+  fadeIn: (ele, time) => {
+    ele.style.cssText = `display:block;animation: to_show ${time}s`
+  },
+
+  fadeOut: (ele, time) => {
+    ele.addEventListener('animationend', function f () {
+      ele.style.cssText = "display: none; animation: '' "
+      ele.removeEventListener('animationend', f)
+    })
+    ele.style.animation = `to_hide ${time}s`
+  },
+
+  getParents: (elem, selector) => {
+    for (; elem && elem !== document; elem = elem.parentNode) {
+      if (elem.matches(selector)) return elem
+    }
+    return null
+  },
+
+  siblings: (ele, selector) => {
+    return [...ele.parentNode.children].filter((child) => {
+      if (selector) {
+        return child !== ele && child.matches(selector)
+      }
+      return child !== ele
+    })
+  },
+
+  /**
+   *
+   * @param {*} selector
+   * @param {*} eleType the type of create element
+   * @param {*} id id
+   * @param {*} cn class name
+   */
+  wrap: function (selector, eleType, id = '', cn = '') {
+    const creatEle = document.createElement(eleType)
+    if (id) creatEle.id = id
+    if (cn) creatEle.className = cn
+    selector.parentNode.insertBefore(creatEle, selector)
+    creatEle.appendChild(selector)
+  },
+
+  unwrap: function (el) {
+    const elParentNode = el.parentNode
+    if (elParentNode !== document.body) {
+      elParentNode.parentNode.insertBefore(el, elParentNode)
+      elParentNode.parentNode.removeChild(elParentNode)
+    }
+  },
+
+  isJqueryLoad: (fn) => {
+    if (typeof jQuery === 'undefined') {
+      getScript(GLOBAL_CONFIG.source.jQuery).then(fn)
+    } else {
+      fn()
+    }
+  },
+
+  isHidden: (ele) => ele.offsetHeight === 0 && ele.offsetWidth === 0,
+
+  getEleTop: (ele) => {
+    let actualTop = ele.offsetTop
+    let current = ele.offsetParent
+
+    while (current !== null) {
+      actualTop += current.offsetTop
+      current = current.offsetParent
+    }
+
+    return actualTop
+  }
+
+}
