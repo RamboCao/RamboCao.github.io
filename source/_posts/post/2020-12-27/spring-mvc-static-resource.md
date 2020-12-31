@@ -1,5 +1,5 @@
 ---
-title: Spring Boot Web 静态资源
+title: Spring Boot Web 静态资源处理
 abbrlink: daaed3e6
 date: 2020-12-27 16:00:54
 tags: Spring Boot
