@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>oracle recursion and rownum</title>
+      <link href="posts/2001e071/"/>
+      <url>posts/2001e071/</url>
+      
+        <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18068.jpg" alt="18068" /></p><h3 id="oracle-recursion"><a class="markdownIt-Anchor" href="#oracle-recursion"></a> Oracle Recursion</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> *</span><br><span class="line"><span class="keyword">FROM</span> (</span><br><span class="line">         <span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> c.name                                               公司，</span><br><span class="line">                         p.parent_id                                          上级合作伙伴节点标识，</span><br><span class="line">                         p1.code                                              上级合作伙伴编码，</span><br><span class="line">                         p1.name                                              上级合作伙伴名称，</span><br><span class="line">                         p.id                                                 合作伙伴标识，</span><br><span class="line">                         p.code                                               合作伙伴编码，</span><br><span class="line">                         p.name                                               合作伙伴名称，</span><br><span class="line">                         <span class="keyword">connect_by_iscycle</span>                                   <span class="keyword">cycle</span>,</span><br><span class="line">                         <span class="keyword">decode</span>(p.status, <span class="number">1</span>, <span class="string">&#x27;有效&#x27;</span>, <span class="string">&#x27;无效&#x27;</span>)                      状态，</span><br><span class="line">                         sys_connect_by_path(p1.code, <span class="string">&#x27;&lt;-&#x27;</span>) || <span class="string">&#x27;&lt;-&#x27;</span> || p.code 合作伙伴路径，</span><br><span class="line">                         <span class="keyword">level</span>                                                重复级别</span><br><span class="line">         <span class="keyword">FROM</span> boss_partner.partner p</span><br><span class="line">                  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> boss_partner.partner p1 <span class="keyword">ON</span> p.parent_id = p1.id</span><br><span class="line">                  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> boss_system.company c <span class="keyword">ON</span> p.company_id = c.id</span><br><span class="line">         <span class="keyword">START</span> <span class="keyword">WITH</span> p.parent_id <span class="keyword">IN</span> (<span class="keyword">SELECT</span> p.parent_id</span><br><span class="line">                                    <span class="keyword">FROM</span> boss_partner.partner p</span><br><span class="line">                                    <span class="keyword">WHERE</span> p.parent_id <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">                                      <span class="keyword">AND</span> p.status = <span class="number">1</span>)</span><br><span class="line">         <span class="keyword">CONNECT</span> <span class="keyword">BY</span> <span class="keyword">NOCYCLE</span> <span class="keyword">PRIOR</span> p.id = p.parent_id)</span><br><span class="line"><span class="keyword">WHERE</span> <span class="keyword">cycle</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure><p><code>Oracle</code> <code>SQL</code> 中的循环使用 <code>START WITH</code> 和 <code>CONNECT BY … PIROR</code> 字段实现，一般情况下，递归循环分为两种，一种是自上而下进行查找，另外一种方式是自下而上进行查找。</p><ol><li><p>自上而上进行查找</p><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> *</span><br><span class="line"><span class="keyword">FROM</span> boss_partner.partner p</span><br><span class="line"><span class="keyword">START</span> <span class="keyword">WITH</span> p.id = ?</span><br><span class="line"><span class="keyword">CONNECT</span> <span class="keyword">BY</span> <span class="keyword">PRIOR</span> p.parent_id = p.id</span><br></pre></td></tr></table></figure></li><li><p>自下而上进行查找</p>  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">from</span> boss_partner.partner p </span><br><span class="line"><span class="keyword">START</span> <span class="keyword">WITH</span> p.parent_id = ?</span><br><span class="line">  <span class="keyword">CONNECT</span> <span class="keyword">BY</span> <span class="keyword">PRIOR</span> p.id = p.parent_id</span><br></pre></td></tr></table></figure></li><li><p>查找中存在环路</p></li><li><p>一些参数的解释</p><ul><li>connect_by_iscycle</li><li>connect_by_isleaf</li><li>sys_connect_by_path</li></ul></li></ol><h3 id="oracle-rownum"><a class="markdownIt-Anchor" href="#oracle-rownum"></a> Oracle Rownum</h3>]]></content>
+      
+      
+      <categories>
+          
+          <category> Oracle </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Oracle </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Spring Boot Web 返回值处理</title>
       <link href="posts/51bf75dc/"/>
       <url>posts/51bf75dc/</url>
