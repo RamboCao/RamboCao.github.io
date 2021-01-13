@@ -6,14 +6,11 @@ cover: 'https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18068.jpg'
 abbrlink: '2001e071'
 date: 2021-01-07 17:18:14
 ---
-
-![18068](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18068.jpg)
-
 ### Oracle Recursion
 #### Hierarchical Queries
 ![Hierarchical Queries](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/Hierarchical_Queries.png)
 
-hierarchical_query_clause::=
+Hierarchical Queries
 <pre>
 [ <b>START WITH</b> condition ]
 <b>CONNECT BY</b> [ <b>NOCYCLE</b> ] condition
@@ -39,7 +36,7 @@ CONNECT BY PRIOR employee_id = manager_id and
 <code>CONNECT BY</code> 和 <PRIOR> 后边的查询都可以采用子查询的方式，但是不能使用序列, <code>CURRVAL</code> 和 <code>NEXTVAL</code> 是无效的 <code>PRIOR</code> 表达式
 
 #### Hierarchical Queries 步骤
-1. 先执行 <code>join</code> 操作, 无论 <code>join</code> 在 <code>FROM</code> 中，还是在 <code>WHERE</code> 条件中
+1. 先执行 <code>JOIN</code> 操作, 无论 <code>JOIN</code> 在 <code>FROM</code> 中，还是在 <code>WHERE</code> 条件中
 2. <code>CONNECT BY</code> 执行
 3. 执行剩下的 <code>WHERE</code> 中的限制条件
 
@@ -113,10 +110,9 @@ SELECT last_name, employee_id, manager_id, LEVEL
     - <code>connect_by_isleaf</code> 该参数用来判断当前节点是否是叶子节点, 树节点能否继续展开。
     - <code>level</code> 伪列, <code>root</code> 标识 level 1
     - sys_connect_by_path, 当且仅当层级查询时有效, 查询结果返回一条从根节点到某个节点的路径, <code>colunm</code> 和 <code>char</code> 可以是任意类型
-
-        <pre>
-        sys_connect_by_path::= <b>SYS_CONNECT_BY_PATH</b>(column, char)
-        </pre>    
+      <pre>
+      sys_connect_by_path::= <b>SYS_CONNECT_BY_PATH</b>(column, char)
+      </pre>    
 ### Oracle Rownum
 1. <code>Oracle</code> 中的 <code>rownum</code> 参数用来限定查询结果返回行数
 2. 当 <code>SQL</code> 中既有排序, 又有 <code>rownum</code> 限定行数, 如果直接在 <code>WHERE</code> 条件中使用 <code>rownum<=2</code>, 那么该结果不是排序之后返回的结果, 而是先查出2条数据, 然后进行排序
@@ -139,4 +135,34 @@ FROM (
 WHERE rownum <= 2
 ```
 
-#### Oracle Left Join
+### Oracle Left Join
+<code>SQL</code> 中 <code>LEFT JOIN</code> 无论如何都会返回左表中所有的行, 即使在右表中没有任何匹配的行
+
+```sql
+SELECT *
+FROM employee e
+         LEFT JOIN product p ON p.employee_id = e.id 
+```
+
+以上, <code>LEFT JOIN</code> 中 ON 条件只有一个, 所以结果没有问题, 将 <code>product</code> 表与 <code>employee</code> 表进行关联, 但是当查询条件包含多个不同的 <code>ON</code> 条件时:
+1. ON 条件中只有第一个条件生效
+2. 如果想要其余的条件生效, 需要将其余条件放在 <code>WHERE</code> 条件中, 此时 <code>LEFT JOIN</code> 相当于 <code>INNER JOIN</code> 查询
+
+当数据库通过两张表或者多张表查询所需要的结果是, 都会生成一张中间记录表, <code>ON</code> 中所有的条件都是用来生成中间记录的, <code>WHERE</code> 条件在最后过滤结果时生效
+
+{% note info modern %}
+<code>ON</code>条件是在生成临时表时使用的条件，它不管 <code>ON</code> 中的条件是否为真，都会返回左边表中的记录, 这也就是为什么左连接的结果可能并不是我们想要的, 计数出现问题, 或者数据中出现 <code>NULL</code> 值
+{% endnote %}
+
+```sql
+-- 这样可能会出现右表为空的情况(当右表的数据与左表没有匹配), 但是左表数据不变
+SELECT *
+FROM employee e
+         LEFT JOIN product p ON p.employee_id = e.id AND e.id = 1
+
+-- 这样相当于 INNER JOIN 内连接, WHERE 条件用来过滤产生的临时表结果
+SELECT *
+FROM employee e
+         LEFT JOIN product p ON p.employee_id = e.id 
+WHERE e.id = 1
+```
