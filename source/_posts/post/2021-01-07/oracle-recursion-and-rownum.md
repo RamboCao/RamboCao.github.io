@@ -166,3 +166,12 @@ FROM employee e
          LEFT JOIN product p ON p.employee_id = e.id 
 WHERE e.id = 1
 ```
+
+### SQL 字符串截取函数
+```sql
+    select substr('12345678', -8, 8) FROM dual; --运行结果：'12345678'
+    select substr('12345678', -9, 9) FROM dual; --运行结果：null
+
+    select 1 from dual where null like '%019';  --无运行结果
+    select 1 from dual WHERE '019' like '%' || null --运行结果：1
+```
