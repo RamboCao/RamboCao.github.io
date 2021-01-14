@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-01-14T05:34:58.961Z</updated>
+  <updated>2021-01-14T07:17:01.301Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Mybatis 增删改查</title>
+    <link href="http://example.com/posts/4ebc1d4b/"/>
+    <id>http://example.com/posts/4ebc1d4b/</id>
+    <published>2021-01-14T06:57:01.000Z</published>
+    <updated>2021-01-14T07:17:01.301Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18078.jpg&quot; alt=&quot;Mybatis 增删改查&quot; /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;mybatis-增删改查&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Mybatis" scheme="http://example.com/categories/Mybatis/"/>
+    
+    
+    <category term="Mybatis" scheme="http://example.com/tags/Mybatis/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Mybatis 初识与配置</title>
     <link href="http://example.com/posts/15832afd/"/>
     <id>http://example.com/posts/15832afd/</id>
     <published>2021-01-13T02:51:22.000Z</published>
-    <updated>2021-01-14T05:34:58.961Z</updated>
+    <updated>2021-01-14T05:44:19.228Z</updated>
     
     
       
