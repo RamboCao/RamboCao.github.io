@@ -1,5 +1,5 @@
 ---
-title: Oracle Recursion and Rownum
+title: Oracle 递归和行号
 tags: Oracle
 categories: Oracle
 cover: 'https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/18068.jpg'
