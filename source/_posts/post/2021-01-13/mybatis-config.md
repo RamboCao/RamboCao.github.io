@@ -210,7 +210,6 @@ public void test() throws IOException {
                 mybatis/mapper/EmployeeMapper.xml
             url：引用网路路径或者磁盘路径下的sql映射文件
                 file:///var/mappers/AuthorMapper.xml
-                
             注册接口
             class：引用（注册）接口，
                 1、有sql映射文件，映射文件名必须和接口同名，并且放在与接口同一目录下；
@@ -221,10 +220,10 @@ public void test() throws IOException {
     -->
     <!-- <mapper resource="mybatis/mapper/EmployeeMapper.xml"/> -->
     <!-- <mapper class="com.atguigu.mybatis.dao.EmployeeMapperAnnotation"/> -->
-    
     <!-- 批量注册： -->
     <package name="com.mybatis.dao"/>
 </mappers>
 ```
 在进行批量注册的时候, 要确保接口路径和 **xxxxmapper.xml** 路径保持一致，否则将无法拿到接口对应的 <code>xml</code> 文件, 放在相同路径下可以找到是因为 <code>java</code> 在编译的时候，会将同一个包名下的文件都放在一起, 目录结构如下图所示
+
 ![目录结构](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/20210114114354.png)
