@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-01-15T09:32:12.995Z</updated>
+  <updated>2021-01-18T07:26:51.673Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HashMap 与 LinkedHashMap</title>
+    <link href="http://example.com/posts/ce0196ed/"/>
+    <id>http://example.com/posts/ce0196ed/</id>
+    <published>2021-01-18T01:53:28.000Z</published>
+    <updated>2021-01-18T07:26:51.673Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;hashmap&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#hashmap&quot;&gt;&lt;/a&gt; HashMap&lt;/h3&gt;
+&lt;h4 id=&quot;hashmap-构造方法&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="Java" scheme="http://example.com/categories/Java/"/>
+    
+    
+    <category term="Java" scheme="http://example.com/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>Mybatis 增删改查</title>
