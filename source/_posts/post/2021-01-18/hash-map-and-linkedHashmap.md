@@ -63,8 +63,11 @@ public static int numberOfLeadingZeros(int i) {
     return n - (i >>> 1);
 }
 ```
+#### HashNode
 
+![HashNode](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/20210121225137.png)
 
+HashMap 中的 Node 静态类实现了 Map.Entry<K,V>
 ```java
 // 通过下标存放或者取值
 (n - 1) & hash
