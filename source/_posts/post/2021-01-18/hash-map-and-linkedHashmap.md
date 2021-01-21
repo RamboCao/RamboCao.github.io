@@ -264,3 +264,6 @@ final Node<K,V>[] resize() {
     return newTab;
 }
 ```
+
+### 红黑树
+![20210121234800](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/20210121234800.png)
