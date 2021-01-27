@@ -266,4 +266,6 @@ final Node<K,V>[] resize() {
 ```
 
 ### 红黑树
-![20210121234800](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/20210121234800.png)
+
+
+![red_black_tree](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/red_black_tree.jpg)
