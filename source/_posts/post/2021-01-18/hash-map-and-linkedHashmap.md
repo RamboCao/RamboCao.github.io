@@ -53,8 +53,12 @@ static final int tableSizeFor(int cap) {
 ```
 以下是对 <code>tableSizeFor</code> 函数的分析, 分为两种不同的情况
 1. 假设 <code>cap</code> 的值正好为 $2^n$, 假设其值为 8, 那么;
-   
+
+   ![tableForSize1](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/tableForSize1.png)
+
 2. 假设 <code>cap</code> 的值不是 $2^n$, 假设其值为 13, 那么;
+   
+   ![tableForSize2](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/tableForSize2.png)
 
 
 ```java
