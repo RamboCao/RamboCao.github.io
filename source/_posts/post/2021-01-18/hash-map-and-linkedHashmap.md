@@ -151,6 +151,34 @@ public static int numberOfLeadingZeros(int i) {
 ![HashNode](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/20210121225137.png)
 
 HashMap 中的 Node 静态类实现了 Map.Entry<K,V>
+
+
+#### HashMap get 方法
+
+HashMap 的 get 方法
+```java
+final Node<K,V> getNode(int hash, Object key) {
+    Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
+    if ((tab = table) != null && (n = tab.length) > 0 &&
+        (first = tab[(n - 1) & hash]) != null) {
+        if (first.hash == hash && // always check first node
+            ((k = first.key) == key || (key != null && key.equals(k))))
+            return first;
+        if ((e = first.next) != null) {
+            if (first instanceof TreeNode)
+                return ((TreeNode<K,V>)first).getTreeNode(hash, key);
+            do {
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    return e;
+            } while ((e = e.next) != null);
+        }
+    }
+    return null;
+}
+```
+
+#### HashMap put 方法
 ```java
 // 通过下标存放或者取值
 (n - 1) & hash
