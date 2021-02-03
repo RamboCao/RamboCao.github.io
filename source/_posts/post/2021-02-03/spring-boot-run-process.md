@@ -1,9 +1,10 @@
 ---
 title: Spring Boot 启动原理
-date: 2021-02-03 13:12:55
 tags: Spring Boot
 categories: Spring Boot
-cover: https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/202002031315.jpg
+cover: 'https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/202002031315.jpg'
+abbrlink: 79b75253
+date: 2021-02-03 13:12:55
 ---
 
 ![202002031315](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/202002031315.jpg)
