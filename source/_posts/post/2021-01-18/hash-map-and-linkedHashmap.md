@@ -352,5 +352,3 @@ final Node<K,V>[] resize() {
 
 
 ![red_black_tree](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/red_black_tree.jpg)
-
-![red_black_tree_1](https://cdn.jsdelivr.net/gh/RamboCao/PicGo/images/red_black_tree_1.png)
