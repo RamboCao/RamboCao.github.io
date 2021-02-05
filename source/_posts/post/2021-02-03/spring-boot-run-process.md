@@ -74,7 +74,7 @@ org.springframework.boot.context.event.EventPublishingRunListener
 #### Enviroment 环境准备
 
 接上文
-1. 环境准备 `prepareEnvironment()`, 获得或者创建 environment, 并且对参数 `applicationArguments` 进行处理
+1. 环境准备 `prepareEnvironment()`, 获得或者创建 `environment`, 并且对参数 `applicationArguments` 进行处理
 ```java
 private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners listeners,
         ApplicationArguments applicationArguments) {
@@ -122,4 +122,126 @@ private ConfigurableEnvironment prepareEnvironment(SpringApplicationRunListeners
 接上文
 1.  首先创建一个 `IOC` 容器(`ApplicationContext`)
     * 判断类型，根据类型对类进行实例化操作并返回。如果是 `SERVLET` 类型，那么创建的类型为 `AnnotationConfigServletWebServerApplicationContext`
-    * 从 
+    * 将 `IOC` 容器实例化为 `ConfigurableApplicationContext` 类型的容器
+2. 对环境准备中创建的 `Collection<SpringBootExceptionReporter> exceptionReporters` 进行填充，对 `SpringApplication` 启动时产生的错误进行处理
+    * 从所有的 `spring.factories` 文件中获取所有的` SpringBootExceptionReporter.class` 全类名并将其放入到 `LinkedHashSet<> names` 中
+    * 创建 `Spring` 工厂实例，并且循环对 `names` 中的类进行实例化获得 `List<T> instances`
+    * 对 `instances` 进行排序
+3. 准备 `IOC` 容器
+    * 设置环境 `environment`
+    * 设置 `beanNameGenerator`、`resourceLoader` 和 `addConversionService`
+    * 将 `ApplicationContextInitializer` 放入到 `IOC` 容器中，每个 `initializer` 执行初始化方法 `initialize()`
+    * `SpringApplicationRunListeners listeners` 遍历循环每一个 `listener` 执行 `contextPrepared()` 方法，构造 `IOC` 容器初始化广播事件 `ApplicationContextInitializedEvent()`， 通知各个监听器
+    * 日志相关处理
+    * 获取 `IOC` 容器 `bean` 工厂 `beanFactory`，单实例方式注册 `applicationArgument和printedBanner`，设置同名 `Bean` 是否可注册为不同的定义
+    * ?? lazyInitialization
+    * 获取所有的资源 `Sources` 包括 `primarySources``、sources`
+    * `IOC` 容器加载资源、环境等内容
+      * `BeanDefinitionLoader loader` 获取 `BeanDefinitionRegistry` 然后创建 `BeanDefinitionLoader` 获得 `BeanDefinitionLoader loader`
+      * `loader` 设置 `setBeanNameGenerator`、`setResourceLoader` 和 `setEnvironment`
+    * `SpringApplicationRunListeners listeners` 遍历循环每一个 `listener` 执行 `contextLoaded()` 方法，为每一个 `listener` 添加 `IOC` 容器，并且 `IOC` 容器将这些监听器添加进去，最后创建 `ApplicationPreparedEvent` 事件并进行广播
+    ```java
+    private void prepareContext(ConfigurableApplicationContext context, ConfigurableEnvironment environment,
+			SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
+		context.setEnvironment(environment);
+		postProcessApplicationContext(context);
+		applyInitializers(context);
+		listeners.contextPrepared(context);
+		if (this.logStartupInfo) {
+			logStartupInfo(context.getParent() == null);
+			logStartupProfileInfo(context);
+		}
+		// Add boot specific singleton beans
+		ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
+		beanFactory.registerSingleton("springApplicationArguments", applicationArguments);
+		if (printedBanner != null) {
+			beanFactory.registerSingleton("springBootBanner", printedBanner);
+		}
+		if (beanFactory instanceof DefaultListableBeanFactory) {
+			((DefaultListableBeanFactory) beanFactory)
+					.setAllowBeanDefinitionOverriding(this.allowBeanDefinitionOverriding);
+		}
+		if (this.lazyInitialization) {
+			context.addBeanFactoryPostProcessor(new LazyInitializationBeanFactoryPostProcessor());
+		}
+		// Load the sources
+		Set<Object> sources = getAllSources();
+		Assert.notEmpty(sources, "Sources must not be empty");
+		load(context, sources.toArray(new Object[0]));
+		listeners.contextLoaded(context);
+	}
+    ```
+4. 刷新 `IOC` 容器
+    * 准备对 `IOC` 容器进行刷新，设置启动时间、激活标志、属性配置源的任何信息
+      * 在 `IOC` 容器中初始化任何占位符属性源。实际没有任何操作
+      * 确认所有的被标记 `required` 的属性都是可解析的
+      * 存储预刷新 `pre-refresh` 的 `ApplicationListeners`
+      * 通知子类刷新内部 `bean` 工厂
+      * 为 `IOC` 容器准备 `bean` 工厂
+      * 允许在 `IOC` 容器中子类对 `bean` 工厂进行后处理。
+    ```java
+    @Override
+	public void refresh() throws BeansException, IllegalStateException {
+		synchronized (this.startupShutdownMonitor) {
+			// Prepare this context for refreshing.
+			prepareRefresh();
+
+			// Tell the subclass to refresh the internal bean factory.
+			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
+
+			// Prepare the bean factory for use in this context.
+			prepareBeanFactory(beanFactory);
+
+			try {
+				// Allows post-processing of the bean factory in context subclasses.
+				postProcessBeanFactory(beanFactory);
+
+				// Invoke factory processors registered as beans in the context.
+				invokeBeanFactoryPostProcessors(beanFactory);
+
+				// Register bean processors that intercept bean creation.
+				registerBeanPostProcessors(beanFactory);
+
+				// Initialize message source for this context.
+				initMessageSource();
+
+				// Initialize event multicaster for this context.
+				initApplicationEventMulticaster();
+
+				// Initialize other special beans in specific context subclasses.
+				onRefresh();
+
+				// Check for listener beans and register them.
+				registerListeners();
+
+				// Instantiate all remaining (non-lazy-init) singletons.
+				finishBeanFactoryInitialization(beanFactory);
+
+				// Last step: publish corresponding event.
+				finishRefresh();
+			}
+
+			catch (BeansException ex) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("Exception encountered during context initialization - " +
+							"cancelling refresh attempt: " + ex);
+				}
+
+				// Destroy already created singletons to avoid dangling resources.
+				destroyBeans();
+
+				// Reset 'active' flag.
+				cancelRefresh(ex);
+
+				// Propagate exception to caller.
+				throw ex;
+			}
+
+			finally {
+				// Reset common introspection caches in Spring's core, since we
+				// might not ever need metadata for singleton beans anymore...
+				resetCommonCaches();
+			}
+		}
+	}
+    ```
